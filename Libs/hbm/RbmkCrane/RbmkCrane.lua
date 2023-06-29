@@ -1,7 +1,23 @@
-local RbmkCrane = {}
+local public = {}
+local private = {}
+
+public.libFunc = {}
+
+private.generalLib = nil
+
+function public.initLib(libPointer)
+    private.generalLib = libPointer
+    private.generalLib.config.libs.setLibVersions("RbmkCrane", "1.12.2")
+end
+
+function public.deleteLib()
+
+end
 
 local component = require("component")
 local math = require("math")
+
+local RbmkCrane = {}
 
 local waitTime = 2
 local waitLoadUnLoadTime = 5

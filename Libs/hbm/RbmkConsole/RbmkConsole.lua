@@ -1,142 +1,119 @@
-local componet = require("component")
-
-public = {}
+local public = {}
 local private = {}
+
+public.libFunc = {}
+
+private.generalLib = nil
+
+function public.libFunc.initLib(libPointer)
+    private.generalLib = libPointer
+    private.generalLib.config.libs.setLibVersions("RbmkConsole", "1.12.2")
+    private.addEnums()
+end
+
+function public.libFunc.deleteLib()
+
+end
+
+local componet = require("component")
 
 --Register List
 private.rbmkConsoleList = {}
 private.rbmkConsoleNow = {}
 private.rbmkMode = 0
 
---const
---enum
-public.enum = {}
-function public.enum.addToEnum(name, value)
-    if (public.enum[name] == nil) then
-        local newTable = {}
-        public.enum[name] = newTable
-        public.enum[name]["EnumCount"] = 0
-    end
-
-    public.enum[name][public.enum[name]["EnumCount"]] = value
-    public.enum[name][value] = public.enum[name]["EnumCount"]
-
-    public.enum[name]["EnumCount"] = public.enum[name]["EnumCount"] + 1
-end
-
-function public.enum.addToEnumMap(name, key, value)
-    if (public.enum[name] == nil) then
-        local newTable = {}
-        public.enum[name] = newTable
-        public.enum[name]["EnumCount"] = 0
-    end
-
-    public.enum[name][key] = value
-
-    public.enum[name]["EnumCount"] = public.enum[name]["EnumCount"] + 1
-end
-
-function public.enum.findToEnum(name, value)
-    if (public.enum[name] == nil) then
-        return nil
-    end
-    return public.enum[name][value]
-end
-
-function public.enum.get(name, value)
-    return public.enum[name][value]
-end
-
 --enum adds
---ComponetNames
-public.enum.addToEnum("ComponetNames", "OTHER")
-public.enum.addToEnum("ComponetNames", "FUEL")
-public.enum.addToEnum("ComponetNames", "FUEL_SIM")
-public.enum.addToEnum("ComponetNames", "CONTROL")
-public.enum.addToEnum("ComponetNames", "CONTROL_AUTO")
-public.enum.addToEnum("ComponetNames", "HEATEX")
-public.enum.addToEnum("ComponetNames", "ABSORBER")
-public.enum.addToEnum("ComponetNames", "COLLER")
-public.enum.addToEnum("ComponetNames", "BOILER")
-public.enum.addToEnum("ComponetNames", "REFLECTOR")
-public.enum.addToEnum("ComponetNames", "STORAGE")
+function private.addEnums()
+    --ComponetNames
+    private.generalLib.enum.addToEnum("ComponetNames", "OTHER")
+    private.generalLib.enum.addToEnum("ComponetNames", "FUEL")
+    private.generalLib.enum.addToEnum("ComponetNames", "FUEL_SIM")
+    private.generalLib.enum.addToEnum("ComponetNames", "CONTROL")
+    private.generalLib.enum.addToEnum("ComponetNames", "CONTROL_AUTO")
+    private.generalLib.enum.addToEnum("ComponetNames", "HEATEX")
+    private.generalLib.enum.addToEnum("ComponetNames", "ABSORBER")
+    private.generalLib.enum.addToEnum("ComponetNames", "COLLER")
+    private.generalLib.enum.addToEnum("ComponetNames", "BOILER")
+    private.generalLib.enum.addToEnum("ComponetNames", "REFLECTOR")
+    private.generalLib.enum.addToEnum("ComponetNames", "STORAGE")
 
---RbmkColor
-public.enum.addToEnum("RbmkColor", "RED")
-public.enum.addToEnum("RbmkColor", "YELLOW")
-public.enum.addToEnum("RbmkColor", "GREEN")
-public.enum.addToEnum("RbmkColor", "BLUE")
-public.enum.addToEnum("RbmkColor", "PURPLE")
-public.enum.addToEnum("RbmkColor", "NONE")
+    --RbmkColor
+    private.generalLib.enum.addToEnum("RbmkColor", "RED")
+    private.generalLib.enum.addToEnum("RbmkColor", "YELLOW")
+    private.generalLib.enum.addToEnum("RbmkColor", "GREEN")
+    private.generalLib.enum.addToEnum("RbmkColor", "BLUE")
+    private.generalLib.enum.addToEnum("RbmkColor", "PURPLE")
+    private.generalLib.enum.addToEnum("RbmkColor", "NONE")
 
---SimMode
-public.enum.addToEnum("SimMode", "FALSE")
-public.enum.addToEnum("SimMode", "TRUE")
+    --SimMode
+    private.generalLib.enum.addToEnum("SimMode", "FALSE")
+    private.generalLib.enum.addToEnum("SimMode", "TRUE")
 
---RetentionData
-public.enum.addToEnumMap("RetentionData", "BaseTable", "BaseTable")
-public.enum.addToEnumMap("RetentionData", "Count", "Count")
-public.enum.addToEnumMap("RetentionData", "Color", "Color")
-public.enum.addToEnumMap("RetentionData", "Min", "Min")
-public.enum.addToEnumMap("RetentionData", "Max", "Max")
-public.enum.addToEnumMap("RetentionData", "Average", "Average")
+    --RetentionData
+    private.generalLib.enum.addToEnumMap("RetentionData", "BaseTable", "BaseTable")
+    private.generalLib.enum.addToEnumMap("RetentionData", "Count", "Count")
+    private.generalLib.enum.addToEnumMap("RetentionData", "Color", "Color")
+    private.generalLib.enum.addToEnumMap("RetentionData", "Min", "Min")
+    private.generalLib.enum.addToEnumMap("RetentionData", "Max", "Max")
+    private.generalLib.enum.addToEnumMap("RetentionData", "Average", "Average")
 
---BaseTableKeys
-public.enum.addToEnum("BaseTableKey", "Name")
-public.enum.addToEnum("BaseTableKey", "X")
-public.enum.addToEnum("BaseTableKey", "Y")
-public.enum.addToEnum("BaseTableKey", "Temperature")
+    --BaseTableKeys
+    private.generalLib.enum.addToEnum("BaseTableKey", "Name")
+    private.generalLib.enum.addToEnum("BaseTableKey", "X")
+    private.generalLib.enum.addToEnum("BaseTableKey", "Y")
+    private.generalLib.enum.addToEnum("BaseTableKey", "Temperature")
 
---ConsoleKeys
-public.enum.addToEnum("RbmkConsoleKey", "Key")
-public.enum.addToEnum("RbmkConsoleKey", "XYZ")
-public.enum.addToEnum("RbmkConsoleKey", "SimMode")
-public.enum.addToEnum("RbmkConsoleKey", "Curves")
-public.enum.addToEnum("RbmkConsoleKey", "MinTable")
-public.enum.addToEnum("RbmkConsoleKey", "MaxTable")
+    --ConsoleKeys
+    private.generalLib.enum.addToEnum("RbmkConsoleKey", "Key")
+    private.generalLib.enum.addToEnum("RbmkConsoleKey", "XYZ")
+    private.generalLib.enum.addToEnum("RbmkConsoleKey", "SimMode")
+    private.generalLib.enum.addToEnum("RbmkConsoleKey", "Curves")
+    private.generalLib.enum.addToEnum("RbmkConsoleKey", "MinTable")
+    private.generalLib.enum.addToEnum("RbmkConsoleKey", "MaxTable")
 
---ControlTableKeys
-public.enum.addToEnum("RbmkControlKey", "Mode")
-public.enum.addToEnum("RbmkControlKey", "Group")
-public.enum.addToEnum("RbmkControlKey", "MinValue")
-public.enum.addToEnum("RbmkControlKey", "MaxValue")
+    --ControlTableKeys
+    private.generalLib.enum.addToEnum("RbmkControlKey", "Mode")
+    private.generalLib.enum.addToEnum("RbmkControlKey", "Group")
+    private.generalLib.enum.addToEnum("RbmkControlKey", "MinValue")
+    private.generalLib.enum.addToEnum("RbmkControlKey", "MaxValue")
 
---CurveBaseTableKeys
-public.enum.addToEnum("CurveBaseKey", "X")
-public.enum.addToEnum("CurveBaseKey", "Y")
-public.enum.addToEnum("CurveBaseKey", "AttributeName")
-public.enum.addToEnum("CurveBaseKey", "AttributeValue")
-public.enum.addToEnum("CurveBaseKey", "CurveMode")
-public.enum.addToEnum("CurveBaseKey", "NodeNow")
-public.enum.addToEnum("CurveBaseKey", "Property")
+    --CurveBaseTableKeys
+    private.generalLib.enum.addToEnum("CurveBaseKey", "X")
+    private.generalLib.enum.addToEnum("CurveBaseKey", "Y")
+    private.generalLib.enum.addToEnum("CurveBaseKey", "AttributeName")
+    private.generalLib.enum.addToEnum("CurveBaseKey", "AttributeValue")
+    private.generalLib.enum.addToEnum("CurveBaseKey", "CurveMode")
+    private.generalLib.enum.addToEnum("CurveBaseKey", "NodeNow")
+    private.generalLib.enum.addToEnum("CurveBaseKey", "Property")
 
---CurveTableKeys
-public.enum.addToEnumMap("CurveTableKey", "CurveBaseTable", "CurveBaseTable")
+    --CurveTableKeys
+    private.generalLib.enum.addToEnumMap("CurveTableKey", "CurveBaseTable", "CurveBaseTable")
 
---CurveNodeKeys
-public.enum.addToEnum("CurveNodeKey", "X")
-public.enum.addToEnum("CurveNodeKey", "Y")
-public.enum.addToEnum("CurveNodeKey", "FuncParameter")
-public.enum.addToEnum("CurveNodeKey", "Function")
-public.enum.addToEnum("CurveNodeKey", "NodeValue")
-public.enum.addToEnum("CurveNodeKey", "ProcessNodeValue")
+    --CurveNodeKeys
+    private.generalLib.enum.addToEnum("CurveNodeKey", "X")
+    private.generalLib.enum.addToEnum("CurveNodeKey", "Y")
+    private.generalLib.enum.addToEnum("CurveNodeKey", "FuncParameter")
+    private.generalLib.enum.addToEnum("CurveNodeKey", "Function")
+    private.generalLib.enum.addToEnum("CurveNodeKey", "NodeValue")
+    private.generalLib.enum.addToEnum("CurveNodeKey", "ProcessNodeValue")
 
---CurvePropertyKeys
-public.enum.addToEnum("CurvePropertyKey", "None")
-public.enum.addToEnum("CurvePropertyKey", "GlobalMin")
-public.enum.addToEnum("CurvePropertyKey", "GlobalMax")
-public.enum.addToEnum("CurvePropertyKey", "GroupMin")
-public.enum.addToEnum("CurvePropertyKey", "GroupMax")
+    --CurvePropertyKeys
+    private.generalLib.enum.addToEnum("CurvePropertyKey", "None")
+    private.generalLib.enum.addToEnum("CurvePropertyKey", "GlobalMin")
+    private.generalLib.enum.addToEnum("CurvePropertyKey", "GlobalMax")
+    private.generalLib.enum.addToEnum("CurvePropertyKey", "GroupMin")
+    private.generalLib.enum.addToEnum("CurvePropertyKey", "GroupMax")
 
---CurveMode
-public.enum.addToEnum("CurveMode", "Static")
-public.enum.addToEnum("CurveMode", "Dynamic")
+    --CurveMode
+    private.generalLib.enum.addToEnum("CurveMode", "Static")
+    private.generalLib.enum.addToEnum("CurveMode", "Dynamic")
 
--- --Test Type
--- public.enum.addToEnum("TestType", "Mode")
--- public.enum.addToEnum("TestType", "Group")
--- public.enum.addToEnum("TestType", "MinValue")
--- public.enum.addToEnum("TestType", "MaxValue")
+    -- --Test Type
+    -- private.generalLib.enum.addToEnum("TestType", "Mode")
+    -- private.generalLib.enum.addToEnum("TestType", "Group")
+    -- private.generalLib.enum.addToEnum("TestType", "MinValue")
+    -- private.generalLib.enum.addToEnum("TestType", "MaxValue")
+end
 
 --RBMK find max
 private.rbmkFindXMax = 15
@@ -231,7 +208,7 @@ function private.tableFunc.getValue(table, key)
 end
 
 function private.tableFunc.getValueAndEnum(table, eKey, eValue)
-    return table[public.enum.get(eKey, eValue)]
+    return table[private.generalLib.enum.get(eKey, eValue)]
 end
 
 function private.tableFunc.setValue(table, key, value)
@@ -239,7 +216,7 @@ function private.tableFunc.setValue(table, key, value)
 end
 
 function private.tableFunc.setValueAndEnum(table, eKey, eValue, value)
-    table[public.enum.get(eKey, eValue)] = value
+    table[private.generalLib.enum.get(eKey, eValue)] = value
 end
 
 --RetentionData
@@ -267,17 +244,18 @@ private.curveBaseFunc = {}
 function private.curveBaseFunc.createBaseCurve(x, y, attributeName, mode, property)
     local newCurveNode = {}
 
-    newCurveNode[public.enum.get("CurveBaseKey", "X")] = x
-    newCurveNode[public.enum.get("CurveBaseKey", "Y")] = y
-    newCurveNode[public.enum.get("CurveBaseKey", "AttributeName")] = attributeName
-    newCurveNode[public.enum.get("CurveBaseKey", "AttributeValue")] = nil
-    newCurveNode[public.enum.get("CurveBaseKey", "CurveMode")] = mode
-    newCurveNode[public.enum.get("CurveBaseKey", "NodeNow")] = nil
+    newCurveNode[private.generalLib.enum.get("CurveBaseKey", "X")] = x
+    newCurveNode[private.generalLib.enum.get("CurveBaseKey", "Y")] = y
+    newCurveNode[private.generalLib.enum.get("CurveBaseKey", "AttributeName")] = attributeName
+    newCurveNode[private.generalLib.enum.get("CurveBaseKey", "AttributeValue")] = nil
+    newCurveNode[private.generalLib.enum.get("CurveBaseKey", "CurveMode")] = mode
+    newCurveNode[private.generalLib.enum.get("CurveBaseKey", "NodeNow")] = nil
 
     if (property == nil) then
-        newCurveNode[public.enum.get("CurveBaseKey", "Property")] = public.enum.get("CurvePropertyKey", "None")
+        newCurveNode[private.generalLib.enum.get("CurveBaseKey", "Property")] = private.generalLib.enum.get(
+        "CurvePropertyKey", "None")
     else
-        newCurveNode[public.enum.get("CurveBaseKey", "Property")] = property
+        newCurveNode[private.generalLib.enum.get("CurveBaseKey", "Property")] = property
     end
 
     return newCurveNode
@@ -345,8 +323,8 @@ private.curveTableFunc = {}
 function private.curveTableFunc.createCurveTable(x, y, attributeName, mode, property)
     local newCurve = {}
 
-    newCurve[public.enum.get("RetentionData", "Count")] = 0
-    newCurve[public.enum.get("CurveTableKey", "CurveBaseTable")] = private.curveBaseFunc.createBaseCurve(x, y,
+    newCurve[private.generalLib.enum.get("RetentionData", "Count")] = 0
+    newCurve[private.generalLib.enum.get("CurveTableKey", "CurveBaseTable")] = private.curveBaseFunc.createBaseCurve(x, y,
         attributeName, mode, property)
 
     return newCurve
@@ -362,12 +340,12 @@ private.curveNodeFunc = {}
 function private.curveNodeFunc.createCurveNode(x, y, func, par, value, pvalue)
     local newCurveNode = {}
 
-    newCurveNode[public.enum.get("CurveNodeKey", "X")] = x
-    newCurveNode[public.enum.get("CurveNodeKey", "Y")] = y
-    newCurveNode[public.enum.get("CurveNodeKey", "Function")] = func
-    newCurveNode[public.enum.get("CurveNodeKey", "FuncParameter")] = par
-    newCurveNode[public.enum.get("CurveNodeKey", "NodeValue")] = value
-    newCurveNode[public.enum.get("CurveNodeKey", "ProcessNodeValue")] = pvalue
+    newCurveNode[private.generalLib.enum.get("CurveNodeKey", "X")] = x
+    newCurveNode[private.generalLib.enum.get("CurveNodeKey", "Y")] = y
+    newCurveNode[private.generalLib.enum.get("CurveNodeKey", "Function")] = func
+    newCurveNode[private.generalLib.enum.get("CurveNodeKey", "FuncParameter")] = par
+    newCurveNode[private.generalLib.enum.get("CurveNodeKey", "NodeValue")] = value
+    newCurveNode[private.generalLib.enum.get("CurveNodeKey", "ProcessNodeValue")] = pvalue
 
     return newCurveNode
 end
@@ -433,7 +411,7 @@ private.curvesFunc = {}
 
 function private.curvesFunc.createCurves()
     local newCurves = {}
-    newCurves[public.enum.get("RetentionData", "Count")] = 0
+    newCurves[private.generalLib.enum.get("RetentionData", "Count")] = 0
     return newCurves
 end
 
@@ -443,9 +421,9 @@ private.baseTableFunc = {}
 function private.baseTableFunc.createBaseTable(data, x, y)
     local newBaseTable = {}
 
-    newBaseTable[public.enum.get("BaseTableKey", "Name")] = data.type
-    newBaseTable[public.enum.get("BaseTableKey", "X")] = x
-    newBaseTable[public.enum.get("BaseTableKey", "Y")] = y
+    newBaseTable[private.generalLib.enum.get("BaseTableKey", "Name")] = data.type
+    newBaseTable[private.generalLib.enum.get("BaseTableKey", "X")] = x
+    newBaseTable[private.generalLib.enum.get("BaseTableKey", "Y")] = y
 
     return newBaseTable
 end
@@ -472,11 +450,13 @@ private.controlTableFunc = {}
 function private.controlTableFunc.creteControlTable(data, x, y)
     local newRbmkConsoleControl = {}
 
-    newRbmkConsoleControl[public.enum.get("RetentionData", "BaseTable")] = private.createBaseTable(data, x, y)
-    newRbmkConsoleControl[public.enum.get("RbmkControlKey", "Mode")] = public.enum.get("ControlMode", "Static")
-    newRbmkConsoleControl[public.enum.get("RbmkControlKey", "Group")] = public.enum.get("RbmkColor", "NONE")
-    newRbmkConsoleControl[public.enum.get("RbmkControlKey", "MinValue")] = 0
-    newRbmkConsoleControl[public.enum.get("RbmkControlKey", "MaxValue")] = 100
+    newRbmkConsoleControl[private.generalLib.enum.get("RetentionData", "BaseTable")] = private.createBaseTable(data, x, y)
+    newRbmkConsoleControl[private.generalLib.enum.get("RbmkControlKey", "Mode")] = private.generalLib.enum.get(
+    "ControlMode", "Static")
+    newRbmkConsoleControl[private.generalLib.enum.get("RbmkControlKey", "Group")] = private.generalLib.enum.get(
+    "RbmkColor", "NONE")
+    newRbmkConsoleControl[private.generalLib.enum.get("RbmkControlKey", "MinValue")] = 0
+    newRbmkConsoleControl[private.generalLib.enum.get("RbmkControlKey", "MaxValue")] = 100
 
     return newRbmkConsoleControl
 end
@@ -506,7 +486,7 @@ private.minTableFunc = {}
 
 function private.minTableFunc.createMinTable()
     local newMinTable = {}
-    newMinTable[public.enum.get("RetentionData", "Count")] = 0
+    newMinTable[private.generalLib.enum.get("RetentionData", "Count")] = 0
     return newMinTable
 end
 
@@ -515,7 +495,7 @@ private.maxTableFunc = {}
 
 function private.maxTableFunc.createMaxTable()
     local newMaxTable = {}
-    newMaxTable[public.enum.get("RetentionData", "Count")] = 0
+    newMaxTable[private.generalLib.enum.get("RetentionData", "Count")] = 0
     return newMaxTable
 end
 
@@ -525,12 +505,13 @@ private.rbmkConsoleFunc = {}
 function private.rbmkConsoleFunc.createRbmkConsoleTable(value)
     local newRbmkConsole = {}
 
-    newRbmkConsole[public.enum.get("RbmkConsoleKey", "Key")] = value
-    newRbmkConsole[public.enum.get("RbmkConsoleKey", "XYZ")] = value.getRBMKPos()
-    newRbmkConsole[public.enum.get("RbmkConsoleKey", "SimMode")] = public.enum.get("SimMode", "FALSE")
-    newRbmkConsole[public.enum.get("RbmkConsoleKey", "Curves")] = private.curvesFunc.createCurves()
-    newRbmkConsole[public.enum.get("RbmkConsoleKey", "MinTable")] = private.minTableFunc.createMinTable()
-    newRbmkConsole[public.enum.get("RbmkConsoleKey", "MaxTable")] = private.maxTableFunc.createMaxTable()
+    newRbmkConsole[private.generalLib.enum.get("RbmkConsoleKey", "Key")] = value
+    newRbmkConsole[private.generalLib.enum.get("RbmkConsoleKey", "XYZ")] = value.getRBMKPos()
+    newRbmkConsole[private.generalLib.enum.get("RbmkConsoleKey", "SimMode")] = private.generalLib.enum.get("SimMode",
+        "FALSE")
+    newRbmkConsole[private.generalLib.enum.get("RbmkConsoleKey", "Curves")] = private.curvesFunc.createCurves()
+    newRbmkConsole[private.generalLib.enum.get("RbmkConsoleKey", "MinTable")] = private.minTableFunc.createMinTable()
+    newRbmkConsole[private.generalLib.enum.get("RbmkConsoleKey", "MaxTable")] = private.maxTableFunc.createMaxTable()
 
     return newRbmkConsole
 end
@@ -591,7 +572,7 @@ function public.addRbmkRunComponet(id)
             end
         end
 
-        local tableCount = table[public.enum.get("RetentionData", "Count")]
+        local tableCount = table[private.generalLib.enum.get("RetentionData", "Count")]
         table[tableCount] = id
         tableCount = tableCount + 1
     end
@@ -599,7 +580,7 @@ function public.addRbmkRunComponet(id)
 end
 
 function public.getRbmkComponet(id)
-    local table = private.rbmkConsoleNow[public.enum.get("RbmkConsoleKey", "Componets")]
+    local table = private.rbmkConsoleNow[private.generalLib.enum.get("RbmkConsoleKey", "Componets")]
     if (table == nil) then
         return nil
     else
@@ -609,14 +590,14 @@ end
 
 function public.getRbmkComponetFromXY(x, y)
     local table = nil
-    local tempTable1 = private.rbmkConsoleNow[public.enum.get("RbmkConsoleKey", "Componets")]
+    local tempTable1 = private.rbmkConsoleNow[private.generalLib.enum.get("RbmkConsoleKey", "Componets")]
 
     for key, value in pairs(tempTable1)
     do
-        local tempTable2 = value[public.enum.get("RetentionData", "BaseTable")]
+        local tempTable2 = value[private.generalLib.enum.get("RetentionData", "BaseTable")]
         if (tempTable2 ~= nil) then
-            if (tempTable2[public.enum.get("BaseTableKey", "X")] == x) then
-                if (tempTable2[public.enum.get("BaseTableKey", "Y")] == y) then
+            if (tempTable2[private.generalLib.enum.get("BaseTableKey", "X")] == x) then
+                if (tempTable2[private.generalLib.enum.get("BaseTableKey", "Y")] == y) then
                     table = value
                     return table, key
                 end
@@ -650,12 +631,13 @@ end
 function private.creteTableTest(data, x, y)
     local table = {}
 
-    if (data.type == public.enum.get("ComponetNames", "CONTROL")) then
+    if (data.type == private.generalLib.enum.get("ComponetNames", "CONTROL")) then
         table = private.creteControlTable(data, x, y)
-        --elseif (data.type == public.enum.get("ComponetNames", "FUEL")) then
-        --elseif (data.type == public.enum.get("ComponetNames", "FUEL_SIM")) then
+        --elseif (data.type == private.generalLib.enum.get("ComponetNames", "FUEL")) then
+        --elseif (data.type == private.generalLib.enum.get("ComponetNames", "FUEL_SIM")) then
     else
-        table[public.enum.get("RetentionData", "BaseTable")] = private.baseTableFunc.createBaseTable(data, x, y)
+        table[private.generalLib.enum.get("RetentionData", "BaseTable")] = private.baseTableFunc.createBaseTable(data, x,
+            y)
     end
 
     return table
@@ -667,13 +649,13 @@ function private.findAllComponets(rbmkConsole)
     local count = 0
     local typeName = nil
 
-    componets[public.enum.get("RetentionData", "Count")] = 0
+    componets[private.generalLib.enum.get("RetentionData", "Count")] = 0
 
     for j = 0, private.rbmkFindYMax, 1 do
         for i = 0, private.rbmkFindXMax, 1 do
             data = private.rbmkFunction.getComponetData(rbmkConsole, i, j)
             if (data.type ~= nil) then
-                typeName = public.enum.findToEnum("ComponetNames", data.type)
+                typeName = private.generalLib.enum.findToEnum("ComponetNames", data.type)
                 if (typeName ~= nil) then
                     componets[count] = private.creteTableTest(data, i, j)
                     count = count + 1
@@ -682,7 +664,7 @@ function private.findAllComponets(rbmkConsole)
         end
     end
 
-    componets[public.enum.get("RetentionData", "Count")] = count
+    componets[private.generalLib.enum.get("RetentionData", "Count")] = count
 
     return componets
 end
@@ -701,23 +683,23 @@ function private.findComponetXYFromAttribute(rbmkConsole, attributeName, flag)
                 if (data[attributeName] ~= nil) then
                     local dataValue = tonumber(data[attributeName])
 
-                    if(dataValue == nil) then
+                    if (dataValue == nil) then
                         goto continue
                     end
 
-                    if (flag == public.enum.get("RetentionData", "Min")) then
+                    if (flag == private.generalLib.enum.get("RetentionData", "Min")) then
                         if (dataValue < value) then
                             value = dataValue
                             x = i
                             y = j
                         end
-                    elseif (flag == public.enum.get("RetentionData", "Max")) then
+                    elseif (flag == private.generalLib.enum.get("RetentionData", "Max")) then
                         if (dataValue > value) then
                             value = dataValue
                             x = i
                             y = j
                         end
-                    elseif (flag == public.enum.get("RetentionData", "Average")) then
+                    elseif (flag == private.generalLib.enum.get("RetentionData", "Average")) then
                         value = value + dataValue
                         count = count + 1
                     end
@@ -741,7 +723,7 @@ function public.setCurveMode(id, openSimMode)
         return false
     end
 
-    table[public.enum.get("RbmkConsoleKey", "SimMode")] = public.enum.get("SimMode", openSimMode)
+    table[private.generalLib.enum.get("RbmkConsoleKey", "SimMode")] = private.generalLib.enum.get("SimMode", openSimMode)
 
     return true
 end
@@ -774,7 +756,7 @@ function private.defaultCurveProcess(baseTable, curveCable, attributeValue)
         if (nodeValue1 <= nodeValue2) then
             if (attributeValue < nodeValue2) then
                 if (attributeValue >= nodeValue1) then
-                    if (private.curveBaseFunc.getCurveMode(baseTable) == public.enum.get("CurveMode", "Dynamic")) then
+                    if (private.curveBaseFunc.getCurveMode(baseTable) == private.generalLib.enum.get("CurveMode", "Dynamic")) then
                         if (nodeNow ~= i) then
                             private.curveBaseFunc.setNodeNow(baseTable, i)
                         end
@@ -796,7 +778,7 @@ function private.defaultCurveProcess(baseTable, curveCable, attributeValue)
         elseif (nodeValue1 > nodeValue2) then
             if (attributeValue < nodeValue1) then
                 if (attributeValue >= nodeValue2) then
-                    if (private.curveBaseFunc.getCurveMode(baseTable) == public.enum.get("CurveMode", "Dynamic")) then
+                    if (private.curveBaseFunc.getCurveMode(baseTable) == private.generalLib.enum.get("CurveMode", "Dynamic")) then
                         if (nodeNow ~= i) then
                             private.curveBaseFunc.setNodeNow(baseTable, i)
                         end
@@ -860,16 +842,16 @@ function private.calCurve(rbmkConsole, curveCable)
 
     local property = private.curveBaseFunc.getProperty(private.curveTableFunc.getCurveBaseTable(curveCable))
 
-    if (property == public.enum.get("CurvePropertyKey", "None")) then
+    if (property == private.generalLib.enum.get("CurvePropertyKey", "None")) then
         private.noneCurveProcess(rbmkConsole, curveCable)
-    elseif (property == public.enum.get("CurvePropertyKey", "GlobalMin")) then
-        private.globalCurveProcess(rbmkConsole, curveCable, public.enum.get("RetentionData", "Min"))
-    elseif (property == public.enum.get("CurvePropertyKey", "GlobalMax")) then
-        private.globalCurveProcess(rbmkConsole, curveCable, public.enum.get("RetentionData", "Max"))
-    elseif (property == public.enum.get("CurvePropertyKey", "GroupMin")) then
-        private.groupCurveProcess(rbmkConsole, curveCable, public.enum.get("RetentionData", "Min"))
-    elseif (property == public.enum.get("CurvePropertyKey", "GroupMax")) then
-        private.groupCurveProcess(rbmkConsole, curveCable, public.enum.get("RetentionData", "Max"))
+    elseif (property == private.generalLib.enum.get("CurvePropertyKey", "GlobalMin")) then
+        private.globalCurveProcess(rbmkConsole, curveCable, private.generalLib.enum.get("RetentionData", "Min"))
+    elseif (property == private.generalLib.enum.get("CurvePropertyKey", "GlobalMax")) then
+        private.globalCurveProcess(rbmkConsole, curveCable, private.generalLib.enum.get("RetentionData", "Max"))
+    elseif (property == private.generalLib.enum.get("CurvePropertyKey", "GroupMin")) then
+        private.groupCurveProcess(rbmkConsole, curveCable, private.generalLib.enum.get("RetentionData", "Min"))
+    elseif (property == private.generalLib.enum.get("CurvePropertyKey", "GroupMax")) then
+        private.groupCurveProcess(rbmkConsole, curveCable, private.generalLib.enum.get("RetentionData", "Max"))
     end
 
     -- print(nodeValue1, nodeValue2, processNodeValue1, processNodeValue2, nodeNow, attributeValue)
@@ -886,7 +868,7 @@ function private.runUpdataCurves()
 end
 
 function private.runMinMaxTest()
-    local countKey = public.enum.get("RetentionData", "Count")
+    local countKey = private.generalLib.enum.get("RetentionData", "Count")
     local rbmkConsole = private.rbmkConsoleFunc.getKey(private.rbmkConsoleNow)
 
     local minTable = private.rbmkConsoleFunc.getMinTable(private.rbmkConsoleNow)
@@ -932,7 +914,7 @@ function public.removeMinValue(attributeName, value)
 end
 
 function public.removeMaxValue(attributeName)
-    if (attributeName == public.enum.get("RetentionData", "Count")) then
+    if (attributeName == private.generalLib.enum.get("RetentionData", "Count")) then
         return
     end
 
@@ -961,7 +943,8 @@ function public.addStaticCurve(x, y, attributeName)
     local curves = private.rbmkConsoleFunc.getCurves(private.rbmkConsoleNow)
     local count = private.retentionDataFunc.getCount(curves)
 
-    curves[count] = private.curveTableFunc.createCurveTable(x, y, attributeName, public.enum.get("CurveMode", "Static"))
+    curves[count] = private.curveTableFunc.createCurveTable(x, y, attributeName,
+        private.generalLib.enum.get("CurveMode", "Static"))
 
     private.retentionDataFunc.setCount(curves, count + 1)
 
@@ -972,7 +955,8 @@ function public.addDynamicCurve(x, y, attributeName)
     local curves = private.rbmkConsoleFunc.getCurves(private.rbmkConsoleNow)
     local count = private.retentionDataFunc.getCount(curves)
 
-    curves[count] = private.curveTableFunc.createCurveTable(x, y, attributeName, public.enum.get("CurveMode", "Dynamic"))
+    curves[count] = private.curveTableFunc.createCurveTable(x, y, attributeName,
+        private.generalLib.enum.get("CurveMode", "Dynamic"))
 
     private.retentionDataFunc.setCount(curves, count + 1)
 
@@ -984,7 +968,8 @@ function public.addGlobalStaticCurve(attributeName, cal)
     local count = private.retentionDataFunc.getCount(curves)
 
     curves[count] = private.curveTableFunc.createCurveTable(-1, -1, attributeName,
-        public.enum.get("CurveMode", "Static"), public.enum.get("CurvePropertyKey", "Global" .. cal))
+        private.generalLib.enum.get("CurveMode", "Static"),
+        private.generalLib.enum.get("CurvePropertyKey", "Global" .. cal))
 
     private.retentionDataFunc.setCount(curves, count + 1)
 
@@ -996,7 +981,8 @@ function public.addGlobalDynamicCurve(attributeName, cal)
     local count = private.retentionDataFunc.getCount(curves)
 
     curves[count] = private.curveTableFunc.createCurveTable(-1, -1, attributeName,
-        public.enum.get("CurveMode", "Dynamic"), public.enum.get("CurvePropertyKey", "Global" .. cal))
+        private.generalLib.enum.get("CurveMode", "Dynamic"),
+        private.generalLib.enum.get("CurvePropertyKey", "Global" .. cal))
 
     private.retentionDataFunc.setCount(curves, count + 1)
 
@@ -1030,7 +1016,8 @@ function public.addNodeToCurveGroup(curve, groupColor, value, pvalue, func, par)
         tempFunc = func
     end
 
-    curve[count] = private.curveNodeFunc.createCurveNode(-1, public.enum.get("RbmkColor", groupColor), tempFunc,
+    curve[count] = private.curveNodeFunc.createCurveNode(-1, private.generalLib.enum.get("RbmkColor", groupColor),
+        tempFunc,
         par, value, pvalue)
 
     private.retentionDataFunc.setCount(curve, count + 1)
@@ -1039,7 +1026,7 @@ function public.addNodeToCurveGroup(curve, groupColor, value, pvalue, func, par)
 end
 
 function public.removeNodeToCurve(value)
-    if (value == public.enum.get("RetentionData", "Count")) then
+    if (value == private.generalLib.enum.get("RetentionData", "Count")) then
         return
     end
 
