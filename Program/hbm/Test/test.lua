@@ -1,0 +1,26 @@
+local rbmk = require("rbmk_crane")
+local component = require("component")
+local rbmk_crane = component.rbmk_crane
+
+rbmk.regRbmkCrane("A", rbmk_crane)
+rbmk.setRbmkCrane("A")
+
+rbmk.posReset()
+rbmk.loadUnload()
+rbmk.moveToPosAuto(4, 4)
+rbmk.loadUnload()
+rbmk.moveToPosAuto(4, -4)
+rbmk.loadUnload()
+rbmk.moveToPosAuto(0, 0)
+rbmk.loadUnload()
+os.sleep(3)
+rbmk.loadUnload()
+rbmk.moveToPosAuto(4, -4)
+rbmk.loadUnload()
+rbmk.moveToPosAuto(4, 4)
+rbmk.loadUnload()
+rbmk.moveToPosAuto(0, 0)
+rbmk.loadUnload()
+rbmk.moveToPosAuto(7, 7)
+
+print(rbmk.getPos())
